@@ -7,7 +7,6 @@
     <style>
         /* CSS Reset & Variables */
         :root {
-            /* 🌙 Dark Mode (Cyberpunk Neon) */
             --bg-deep: #050b14;
             --bg-panel: rgba(13, 17, 28, 0.75);
             --neon-blue: #00e5ff;
@@ -24,7 +23,6 @@
             --glass-blur: blur(10px);
         }
 
-        /* ☀️ Light Mode (Clean Corporate Sci-Fi) */
         body.light-mode {
             --bg-deep: #f0f4f8;
             --bg-panel: #ffffff;
@@ -43,131 +41,79 @@
         }
 
         body { 
-            margin: 0; 
-            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; 
-            background-color: var(--bg-deep);
-            color: var(--text-main); 
-            height: 100vh; 
-            overflow: hidden; 
-            background-image: 
-                linear-gradient(var(--grid-line) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 30px 30px;
-            background-position: center center;
+            margin: 0; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; 
+            background-color: var(--bg-deep); color: var(--text-main); 
+            height: 100vh; overflow: hidden; 
+            background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 30px 30px; background-position: center center;
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* 1. View Controller */
         .view-section {
             width: 100%; height: 100%; position: absolute; top: 0; left: 0;
             transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
             opacity: 0; visibility: hidden; display: flex; flex-direction: column;
         }
-        .view-section.active {
-            opacity: 1; visibility: visible; transform: scale(1) translateY(0);
-        }
+        .view-section.active { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
         #gridView { transform: translateY(15px); overflow-y: auto; padding-bottom: 50px; }
         #iframeView { transform: translateY(50px); }
 
-        /* 2. Grid View Design (หน้าแรก) */
         .header { text-align: center; margin: 60px 0 30px 0; position: relative; }
         .brand-title {
             font-size: 3.2em; font-weight: 900; margin: 0; text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--text-main);
-            text-shadow: var(--title-shadow);
-            transition: all 0.4s ease;
+            letter-spacing: 3px; color: var(--text-main); text-shadow: var(--title-shadow);
         }
         .header p { color: var(--neon-blue); font-size: 1em; letter-spacing: 2px; font-weight: 600; margin-top: 10px; }
 
-        /* ปุ่มสลับธีม สไตล์ Switch */
-        .theme-toggle-btn {
-            position: absolute; top: 25px; right: 30px;
-            background: var(--bg-panel);
-            border: 1px solid var(--border-card);
-            color: var(--text-main);
-            padding: 10px 18px;
-            border-radius: 50px;
-            cursor: pointer; display: flex; align-items: center; gap: 10px;
+        .theme-toggle-btn, .global-sync-btn {
+            position: absolute; top: 25px; background: var(--bg-panel);
+            border: 1px solid var(--border-card); color: var(--text-main);
+            padding: 10px 18px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 10px;
             font-weight: 700; font-size: 13px; letter-spacing: 1px;
             backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            transition: all 0.3s; z-index: 100;
-            box-shadow: var(--card-shadow);
+            transition: all 0.3s; z-index: 100; box-shadow: var(--card-shadow);
         }
-        .theme-toggle-btn:hover { border-color: var(--neon-blue); transform: translateY(-2px); }
-        .theme-toggle-btn span { font-size: 16px; }
+        .theme-toggle-btn { right: 30px; }
+        .global-sync-btn { right: 175px; color: var(--neon-blue); border-color: rgba(0, 229, 255, 0.3); }
+        .theme-toggle-btn:hover, .global-sync-btn:hover { border-color: var(--neon-blue); transform: translateY(-2px); }
 
         .drive-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px; max-width: 1300px; margin: 0 auto; padding: 20px;
         }
 
-        /* การ์ดลื่นไหล (Hardware Acceleration) */
         .drive-card {
-            background: var(--bg-panel);
-            backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border-card);
-            border-radius: 14px;
-            padding: 24px 20px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transform: translateZ(0); /* ลดแลค */
+            background: var(--bg-panel); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-card); border-radius: 14px; padding: 24px 20px; cursor: pointer;
+            position: relative; overflow: hidden; box-shadow: var(--card-shadow); transform: translateZ(0);
             transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
         }
-        
         .drive-card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-            background: var(--neon-blue);
-            opacity: 0.3; transition: all 0.3s ease;
+            background: var(--neon-blue); opacity: 0.3; transition: all 0.3s ease;
         }
-        
-        .drive-card:hover {
-            transform: translateY(-6px) translateZ(0);
-            background: var(--card-hover-bg);
-            border-color: var(--neon-blue);
-        }
-        body:not(.light-mode) .drive-card:hover {
-            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.2);
-        }
-        body.light-mode .drive-card:hover {
-            box-shadow: 0 12px 24px rgba(0, 85, 255, 0.15);
-        }
+        .drive-card:hover { transform: translateY(-6px) translateZ(0); background: var(--card-hover-bg); border-color: var(--neon-blue); }
+        body:not(.light-mode) .drive-card:hover { box-shadow: 0 10px 30px rgba(0, 229, 255, 0.2); }
+        body.light-mode .drive-card:hover { box-shadow: 0 12px 24px rgba(0, 85, 255, 0.15); }
         .drive-card:hover::before { opacity: 1; width: 6px; }
 
         .card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 18px; }
         .folder-icon { font-size: 38px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
         .folder-name { font-weight: 700; font-size: 1.15em; color: var(--text-main); }
 
-        /* แถบพื้นที่ */
         .storage-info { margin-top: 15px; }
         .storage-text { display: flex; justify-content: space-between; font-size: 0.85em; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
         .storage-text .highlight { color: var(--neon-blue); }
         
-        .storage-bar-bg {
-            width: 100%; height: 6px; background: rgba(128, 128, 128, 0.15);
-            border-radius: 10px; overflow: hidden;
-        }
-        .storage-bar-fill {
-            height: 100%; border-radius: 10px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
-            width: 0%; transition: width 1s cubic-bezier(0.1, 0.8, 0.2, 1);
-        }
+        .storage-bar-bg { width: 100%; height: 6px; background: rgba(128, 128, 128, 0.15); border-radius: 10px; overflow: hidden; }
+        .storage-bar-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); width: 0%; transition: width 1s cubic-bezier(0.1, 0.8, 0.2, 1); }
 
-        /* 3. Iframe View */
         .top-bar { 
             padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; 
-            background: var(--bg-panel); 
-            backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            border-bottom: 1px solid var(--border-card); 
-            z-index: 10; 
+            background: var(--bg-panel); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border-card); z-index: 10; 
         }
-        .drive-title-bar { 
-            font-size: 1.2em; font-weight: 800; display: flex; align-items: center; gap: 12px;
-            color: var(--neon-blue); text-transform: uppercase;
-        }
+        .drive-title-bar { font-size: 1.2em; font-weight: 800; display: flex; align-items: center; gap: 12px; color: var(--neon-blue); text-transform: uppercase; }
         
         .action-group { display: flex; gap: 12px; }
         .btn-action { 
@@ -175,31 +121,22 @@
             font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; 
             display: flex; align-items: center; gap: 8px; text-transform: uppercase;
         }
-        
         .back-btn { background: var(--btn-bg); border-color: var(--btn-border); }
         .back-btn:hover { background: var(--btn-border); border-color: var(--text-muted); }
-        
         .upload-btn { background: rgba(166, 0, 255, 0.1); border-color: var(--neon-purple); color: var(--neon-purple); }
         .upload-btn:hover { background: var(--neon-purple); color: #fff; }
-        
         .refresh-btn { background: rgba(0, 229, 255, 0.1); border-color: var(--neon-blue); color: var(--neon-blue); }
         .refresh-btn:hover { background: var(--neon-blue); color: #fff; }
 
         .iframe-wrapper { flex-grow: 1; padding: 20px; box-sizing: border-box; display: flex; }
-        .iframe-container { 
-            flex-grow: 1; background: #fff; border-radius: 12px; 
-            overflow: hidden; display: flex; border: 2px solid var(--border-card);
-            box-shadow: var(--card-shadow);
-        }
+        .iframe-container { flex-grow: 1; background: #fff; border-radius: 12px; overflow: hidden; display: flex; border: 2px solid var(--border-card); box-shadow: var(--card-shadow); }
         iframe { width: 100%; height: 100%; border: none; flex-grow: 1; }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.3); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
         
-        /* Loading Skeleton */
         .skeleton { color: transparent !important; background: linear-gradient(90deg, rgba(128,128,128,0.1) 25%, rgba(128,128,128,0.2) 50%, rgba(128,128,128,0.1) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 4px; }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     </style>
@@ -207,7 +144,7 @@
 <body>
 
     <div id="gridView" class="view-section active">
-        <!-- ปุ่มสลับธีม -->
+        <button id="globalSyncBtn" class="global-sync-btn">SYNC ALL 🔄</button>
         <button id="themeToggleBtn" class="theme-toggle-btn">
             <span id="themeIcon">☀️</span> <span id="themeText">LIGHT</span>
         </button>
@@ -216,9 +153,7 @@
             <h1 class="brand-title">Nexus Core</h1>
             <p>SECURE STORAGE PROTOCOL</p>
         </div>
-        <div class="drive-container" id="gridContainer">
-            <!-- การ์ดจะถูกสร้างด้วย JS (Lazy Load) -->
-        </div>
+        <div class="drive-container" id="gridContainer"></div>
     </div>
 
     <div id="iframeView" class="view-section">
@@ -246,7 +181,6 @@
     </div>
 
     <script>
-        // --- 1. ระบบจัดการธีม ---
         const themeBtn = document.getElementById('themeToggleBtn');
         const body = document.body;
         
@@ -267,7 +201,6 @@
             updateThemeUI(isLight);
         };
 
-        // --- 2. ข้อมูล Drive ทั้งหมด 31 ตัว ---
         const myDrives = [
             { name: "Drive 0 (มหาลัย)", link: "https://drive.google.com/drive/folders/11li0rNAkKu-b50r8aNGs6WqD9RopX6Wm?usp=sharing", icon: "📚" },
             { name: "Drive 1 (รูปภาพ)", link: "https://drive.google.com/drive/folders/1SJ7M8Kzv-em0yu8oNpvXkRiS803Z_SMu?usp=sharing", icon: "📸" },
@@ -302,25 +235,10 @@
             { name: "Drive 30", link: "https://drive.google.com/drive/folders/1l9Nmtj5aolHCjgD7WsfH_3ezQp6hfCCB?usp=sharing", icon: "🗂️"}
         ];
 
-        // --- 3. สร้าง UI & Lazy Loading API (แก้ปัญหาแลค) ---
         const gridContainer = document.getElementById('gridContainer');
         const gasUrl = "https://script.google.com/macros/s/AKfycbxgJ6Wn6WBbzgmXyzqIEQVjbcMyBDIz5LsNh_CuOnzIXUkPpkXZmz7hS1Q1-pWM_D7Hgw/exec"; 
         const fragment = document.createDocumentFragment();
-
-        // สร้าง Observer สำหรับเช็คว่าการ์ดไหนกำลังถูกมองเห็น
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const card = entry.target;
-                    const folderId = card.dataset.folderId;
-                    
-                    if (folderId && !card.dataset.loaded) {
-                        card.dataset.loaded = "true"; // มาร์คว่าโหลดแล้ว จะได้ไม่โหลดซ้ำ
-                        fetchDriveSize(folderId, card);
-                    }
-                }
-            });
-        }, { rootMargin: '100px' }); // โหลดล่วงหน้าก่อนเลื่อนถึง 100px
+        const allCardElements = [];
 
         myDrives.forEach((drive) => {
             const folderIdMatch = drive.link.match(/[-\w]{25,}/);
@@ -345,52 +263,94 @@
                 </div>
             `;
 
-            card.onclick = () => openDrive(drive.name, drive.icon, drive.link, folderId);
+            card.onclick = () => openDrive(drive.name, drive.icon, drive.link, folderId, card);
             fragment.appendChild(card);
             
-            // ให้ Observer จับตาดูการ์ดนี้
-            if(folderId) observer.observe(card);
+            if (folderId) {
+                allCardElements.push({ folderId, card });
+            }
         });
 
         gridContainer.appendChild(fragment);
 
-        // --- 4. ฟังก์ชันดึงข้อมูลพื้นที่ (ทำงานเฉพาะตัวที่เห็นหน้าจอ) ---
-        async function fetchDriveSize(folderId, cardElement) {
+        // ดึงข้อมูลรวดเดียว 1 ครั้ง (จบปัญหาโดนแบนคำขอ/OFFLINE)
+        async function loadAllDrives(force = false) {
             try {
-                const res = await fetch(`${gasUrl}?folderId=${folderId}`);
-                const data = await res.json();
+                // ขึ้นสถานะ Loading ทั้งหมด
+                allCardElements.forEach(item => {
+                    const status = item.card.querySelector('.storage-status');
+                    status.classList.add('skeleton');
+                    status.innerHTML = 'SYNCING...';
+                });
+
+                const timestamp = new Date().getTime();
+                let fetchUrl = `${gasUrl}?t=${timestamp}`;
+                if (force) fetchUrl += `&force=true`;
+
+                const res = await fetch(fetchUrl);
+                const responseData = await res.json();
                 
-                const statusElement = cardElement.querySelector('.storage-status');
-                const barFill = cardElement.querySelector('.storage-bar-fill');
-                
-                if(!data.error) {
-                    statusElement.classList.remove('skeleton');
-                    statusElement.innerHTML = `Used <span class="highlight">${data.formattedSize}</span>`;
-                    
-                    const maxDriveSize = 15 * 1024 * 1024 * 1024; // 15GB
-                    let percent = (data.totalBytes / maxDriveSize) * 100;
-                    barFill.style.width = `${Math.min(percent, 100)}%`;
-                    
-                    if(percent > 85) {
-                        barFill.style.background = 'linear-gradient(90deg, #ff0055, #ffaa00)';
-                    }
+                // เพิ่มจุดตัดจบตรงนี้: หากสคริปต์ตอบกลับมาเป็น Error ให้กระโดดไป Catch ทันที
+                if (responseData.error) {
+                    throw new Error("API Error or Script version mismatch");
                 }
-            } catch(err) {
-                cardElement.querySelector('.storage-status').innerHTML = "OFFLINE";
-                cardElement.querySelector('.storage-status').classList.remove('skeleton');
+                
+                if (responseData.data) {
+                    // กระจายข้อมูลใส่การ์ดแต่ละใบ
+                    allCardElements.forEach(item => {
+                        const driveData = responseData.data[item.folderId];
+                        const statusElement = item.card.querySelector('.storage-status');
+                        const barFill = item.card.querySelector('.storage-bar-fill');
+                        
+                        if (driveData) {
+                            statusElement.classList.remove('skeleton');
+                            statusElement.innerHTML = `Used <span class="highlight">${driveData.formattedSize}</span>`;
+                            
+                            const maxDriveSize = 15 * 1024 * 1024 * 1024; // 15GB
+                            let percent = (driveData.totalBytes / maxDriveSize) * 100;
+                            barFill.style.width = `${Math.min(percent, 100)}%`;
+                            
+                            if(percent > 85) {
+                                barFill.style.background = 'linear-gradient(90deg, #ff0055, #ffaa00)';
+                            } else {
+                                barFill.style.background = 'linear-gradient(90deg, var(--neon-blue), var(--neon-purple))';
+                            }
+                        } else {
+                            statusElement.classList.remove('skeleton');
+                            statusElement.innerHTML = 'WAITING SYNC';
+                        }
+                    });
+                }
+            } catch (err) {
+                // หากลิงก์ผิด หรือ API มีปัญหา จะแสดงผลตรงนี้แทนการค้าง
+                allCardElements.forEach(item => {
+                    const statusElement = item.card.querySelector('.storage-status');
+                    statusElement.classList.remove('skeleton');
+                    statusElement.innerHTML = 'API ERROR';
+                });
             }
         }
 
-        // --- 5. Navigation Control ---
+        // เริ่มโหลดทันทีที่เปิดเว็บ
+        loadAllDrives(false);
+
+        // ปุ่ม Sync All
+        document.getElementById('globalSyncBtn').onclick = () => {
+            loadAllDrives(true);
+        };
+
         const gridView = document.getElementById('gridView');
         const iframeView = document.getElementById('iframeView');
         const frame = document.getElementById('driveFrame');
+        
         let currentActiveLink = "";
+        let currentFolderId = "";
 
-        function openDrive(name, icon, link, folderId) {
+        function openDrive(name, icon, link, folderId, cardElement) {
             if (!folderId) return alert("⚠️ ERROR: INVALID LINK");
-            
             currentActiveLink = link;
+            currentFolderId = folderId;
+            
             document.getElementById('currentName').innerText = name;
             document.getElementById('currentIcon').innerText = icon;
             
@@ -416,8 +376,12 @@
         };
 
         document.getElementById('refreshBtn').onclick = () => {
-            const folderIdMatch = currentActiveLink.match(/[-\w]{25,}/);
-            if (folderIdMatch) frame.src = `https://drive.google.com/embeddedfolderview?id=${folderIdMatch[0]}#list`;
+            if (currentFolderId) {
+                frame.src = 'about:blank';
+                setTimeout(() => {
+                    frame.src = `https://drive.google.com/embeddedfolderview?id=${currentFolderId}#list`;
+                }, 100);
+            }
         };
     </script>
 </body>
